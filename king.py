@@ -1,4 +1,4 @@
-import piece
+import piece,pdb
 
 class King(piece.Piece):
 
@@ -25,11 +25,12 @@ class King(piece.Piece):
             for i in filteredPossibleMoves:
                 if i == next:
                     print("Can't move onto a red spot")
+                    # pdb.set_trace()
                     return False
             return True
 
         else:
-            print("Invalid move")
+            # print("Invalid move")
             return False
 
     def redSpot(self, filteredPossibleMoves):

@@ -67,6 +67,8 @@ def chessGame(player1, player2):
                 piecesAll.clear()
                 player1.printPieces()
 
+                print("From player2")
+                # print(player2.possibleMoves)
                 userIn = playerPrompt(player1.color, start)
 
                 if userIn.lower() == "quit":
@@ -78,7 +80,7 @@ def chessGame(player1, player2):
                 userIn = trim(userIn)
 
                 if player1.movePiece(player2, player1.pieces[player1.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
-                    pass
+                    continue
                 else:
                     print()
                     print("***Invalid move***")
@@ -103,6 +105,9 @@ def chessGame(player1, player2):
                 piecesAll.clear()
                 player2.printPieces()
 
+                print("From player1")
+                # print(player1.possibleMoves)
+
                 userIn = playerPrompt(player2.color, start)
 
                 if userIn.lower() == "quit":
@@ -119,7 +124,7 @@ def chessGame(player1, player2):
 
                 if player2.movePiece(player1, player2.pieces[player2.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
                     start = False
-                    pass
+                    continue
                 else:
                     print()
                     print("***Invalid move***")
@@ -295,6 +300,7 @@ def chessGame(player1, player2):
         #     bool2 = player2.movePiece(player1, player2.pieces[player2.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
         #     if bool2:
         #         continue
+
 def main():
     main = True
     colorChoose = True
