@@ -7,68 +7,110 @@ class Player():
     knights = list()
     bishops = list()
     pawns = list()
-    queen = None
-    king = None
+    queenP = queen.Queen(True)
+    kingP = king.King(True)
     
 
     def __init__(self, color) -> None:
+        self.possibleMoves = list()
         self.color = color
         self.initPieces()
 
 
     def movePiece(self, player, piece, next):
+        self.possibleMoves.clear()
+        # print(player.possibleMoves)
 
-            if piece.name.lower() == "p":
-                print(piece.start)
-                if self.take(player, next):
-                    if piece.moveChoose(next, True) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
-                    # if piece.moveChoose(next, True) and self.collision(piece, player, next):
-                        for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
-                            if val.position == next:
-                                player.pieces.pop(i)
-                                piece.position = next
-                                print("Take pawn move true")
-                                return True
-                    else:
-                        print("Take pawn move not true")
-                        return False
-
-                elif piece.moveChoose(next, False) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
-                # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
-                    piece.position = next
-                    print("Pawn move true")
-                    return True
-
-                else:
-                    print("Pawn move not true")
-                    return False
-
-            elif piece.moveChoose(next) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
-            # elif piece.moveChoose(next) and self.collision(piece, player, next):
-                if self.take(player, next):
-                    for i,val in enumerate(player.pieces):
+        if piece.name.lower() == "p":
+            print(piece.start)
+            if self.take(player, next):
+                if piece.moveChoose(next, True) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+                # if piece.moveChoose(next, True) and self.collision(piece, player, next):
+                    for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
                         if val.position == next:
                             player.pieces.pop(i)
                             piece.position = next
-                            print("Take move is true")
+                            print("Take pawn move true")
+                            self.filterPossibleMoves(player)
                             return True
-
                 else:
-                    piece.position = next
-                    print("Move is true")
-                    return True
+                    print("Take pawn move not true")
+                    self.filterPossibleMoves(player)
+                    return False
+
+            elif piece.moveChoose(next, False) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+            # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
+                piece.position = next
+                print("Pawn move true")
+                self.filterPossibleMoves(player)
+                return True
 
             else:
-                print("Move is not true")
+                print("Pawn move not true")
+                self.filterPossibleMoves(player)
                 return False
 
+        elif piece.name.lower() == "k":
+            # pdb.set_trace()
+            if self.take(player, next):
+                if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+                # if piece.moveChoose(next, True) and self.collision(piece, player, next):
+                    for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
+                        if val.position == next:
+                            player.pieces.pop(i)
+                            piece.position = next
+                            print("Take kingP move true")
+                            self.filterPossibleMoves(player)
+                            return True
+                    self.filterPossibleMoves(player)
+                    return False
+                else:
+                    print("Take kingP move not true")
+                    self.filterPossibleMoves(player)
+                    return False
+
+            elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+            # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
+                piece.position = next
+                print("King move true")
+                self.filterPossibleMoves(player)
+                return True
+
+            else:
+                print("King move not true")
+                self.filterPossibleMoves(player)
+                return False
+
+
+        elif piece.moveChoose(next) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+        # elif piece.moveChoose(next) and self.collision(piece, player, next):
+            if self.take(player, next):
+                for i,val in enumerate(player.pieces):
+                    if val.position == next:
+                        player.pieces.pop(i)
+                        piece.position = next
+                        print("Take move is true")
+                        self.filterPossibleMoves(player)
+                        return True
+
+            else:
+                piece.position = next
+                print("Move is true")
+                self.filterPossibleMoves(player)
+                return True
+
+        else:
+            print("Move is not true")
+            self.filterPossibleMoves(player)
+            return False
+
     def initPieces(self):
-        self.king = king.King(self.color)
-        self.queen = queen.Queen(self.color)
+        self.kingP = king.King(self.color)
+        self.queenP = queen.Queen(self.color)
         self.pieces = list()
 
-        self.pieces.append(self.king)
-        self.pieces.append(self.queen)
+        self.pieces.append(self.kingP)
+        self.pieces.append(self.queenP)
 
         self.rooks = list()
         for i in range(0, 2):
@@ -144,7 +186,7 @@ class Player():
                 return False
 
         except ZeroDivisionError:
-            print("Zero divison error")
+            # print("Zero divison error")
             return False
 
 
@@ -163,14 +205,14 @@ class Player():
 
         for i in self.pieces:
             if next == i.position and next != piece.position: # might be a redundant check
-                pdb.set_trace()
+                # pdb.set_trace()
                 return False
             elif self.isBetween(piece.position, next, i.position):
-                pdb.set_trace()
+                # pdb.set_trace()
                 return False
         for i in player.pieces:
             if(self.isBetween(piece.position, next, i.position) and next != i.position):
-                pdb.set_trace()
+                # pdb.set_trace()
                 return False
 
 
@@ -184,7 +226,7 @@ class Player():
 
             if i.name.lower() == ("q" or "r" or "b"):
                 vectorPiece = [i.position[0] - pos[0], i.position[1] - pos[1]]
-                vectorKing = [i.position[0] - self.king.position[0], i.position[1] - self.king.position[1]]
+                vectorKing = [i.position[0] - self.kingP.position[0], i.position[1] - self.kingP.position[1]]
                 angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorPiece, vectorKing)/(self.magnetude2d(vectorPiece) * self.magnetude2d(vectorKing))))
 
                 if angle != 0:
@@ -192,16 +234,21 @@ class Player():
                     # return True
 
                 elif i.moveChoose(pos) and self.collision(i, self, pos):
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     return False
 
         return True
 
     def filterPossibleMoves(self, player):
         for i in self.pieces:
+            if i.name.lower() == "k": # temporay fix
+                buffer = i.redSpot(player.possibleMoves)
+                continue
             buffer = i.redSpot()
             for j in buffer:
-                if self.collision(player, i, j):
+                if self.collision( i, player, j):
+                    # if i.name.lower() == "q":
+                    #     pdb.set_trace()
                     self.possibleMoves.append(j)
 
     def take(self, player, next):
