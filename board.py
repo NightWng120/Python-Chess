@@ -16,7 +16,7 @@ class Board():
 
     def inputToPos(self, posIn):
         # converts tradition chess coordinates to 8x8 coordinates
-        print(f"PosIn: {posIn}")
+        # print(f"PosIn: {posIn}")
         return [ord(posIn[0].lower()) - 97, int(posIn[1]) - 1]
 
     def posToBoard(self, pos):
