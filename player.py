@@ -175,12 +175,12 @@ class Player():
         vectorNext = [next[0] - pos[0], next[1] - pos[1]]
 
         try:
-            angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
+            angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
 
             posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece postion and desired move
             distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next) # the sum of the distances between the current piece postion and desired move postion with another piece
 
-            if angle == 0 and posToNext == distancesSum:
+            if (angle == 0 and posToNext == distancesSum) or (angle < 1 and angle > 0 and posToNext == distancesSum):
                 return True
             else:
                 return False
@@ -211,8 +211,10 @@ class Player():
                 # pdb.set_trace()
                 return False
         for i in player.pieces:
+            # if i.position == [5,2] and piece.position == [6,3]:
+            #     pdb.set_trace()
+
             if(self.isBetween(piece.position, next, i.position) and next != i.position):
-                # pdb.set_trace()
                 return False
 
 
@@ -229,7 +231,7 @@ class Player():
                 vectorKing = [i.position[0] - self.kingP.position[0], i.position[1] - self.kingP.position[1]]
                 angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorPiece, vectorKing)/(self.magnetude2d(vectorPiece) * self.magnetude2d(vectorKing))))
 
-                if angle != 0:
+                if (angle != 0 and angle > 1) or (angle != 0 and angle < 0): # This is setup this way to catch weird rounding errors that are less than 1 and register them as angles of 0
                     continue
                     # return True
 
