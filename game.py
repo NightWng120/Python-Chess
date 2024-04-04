@@ -23,7 +23,7 @@ def playerPrompt(color, start, check):
     colors = {True:"White", False:"Black"}
     if start:
         if check:
-            pdb.set_trace()
+            # pdb.set_trace()
             print( "|------------------------------|")
             print(f"|        Player {colors[color]}          |")
             print( "|------------------------------|")
@@ -50,7 +50,7 @@ def playerPrompt(color, start, check):
 
     else:
         if check:
-            pdb.set_trace()
+            # pdb.set_trace()
             print( "|------------------------------|")
             print(f"|        Player {colors[color]}          |")
             print( "|------------------------------|")
