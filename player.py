@@ -23,8 +23,11 @@ class Player():
 
         if piece.name.lower() == "p":
             print(piece.start)
+            if self.color and piece.position == [5,2] and (next == [6,3] or next == [5,3]):
+                pdb.set_trace()
+
             if self.take(player, next):
-                if piece.moveChoose(next, True) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+                if piece.moveChoose(next, True) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
                 # if piece.moveChoose(next, True) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
                         if val.position == next:
@@ -38,7 +41,7 @@ class Player():
                     self.filterPossibleMoves(player)
                     return False
 
-            elif piece.moveChoose(next, False) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+            elif piece.moveChoose(next, False) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
             # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
                 piece.position = next
                 print("Pawn move true")
@@ -53,7 +56,7 @@ class Player():
         elif piece.name.lower() == "k":
             # pdb.set_trace()
             if self.take(player, next):
-                if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+                if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
                 # if piece.moveChoose(next, True) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
                         if val.position == next:
@@ -69,7 +72,7 @@ class Player():
                     self.filterPossibleMoves(player)
                     return False
 
-            elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+            elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
             # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
                 piece.position = next
                 print("King move true")
@@ -82,7 +85,7 @@ class Player():
                 return False
 
 
-        elif piece.moveChoose(next) and self.collision(piece, player, next) and self.pieceLock(player, piece.position):
+        elif piece.moveChoose(next) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
         # elif piece.moveChoose(next) and self.collision(piece, player, next):
             if self.take(player, next):
                 for i,val in enumerate(player.pieces):
@@ -220,23 +223,36 @@ class Player():
 
         return True
 
-    def pieceLock(self, player, pos):
+    def pieceLock(self, player, pos, next):
         # return True
         # Returns False if a piece is locked in place
 
+
         for i in player.pieces:
 
-            if i.name.lower() == ("q" or "r" or "b"):
+            # if pos == [5,2] and (next in [[6, 3], [5, 3]]):
+            #     pdb.set_trace()
+
+            if i.name.lower() in ["q", "r" ,"b"]:
                 vectorPiece = [i.position[0] - pos[0], i.position[1] - pos[1]]
                 vectorKing = [i.position[0] - self.kingP.position[0], i.position[1] - self.kingP.position[1]]
                 angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorPiece, vectorKing)/(self.magnetude2d(vectorPiece) * self.magnetude2d(vectorKing))))
 
+                # if i.position == [6,3] and pos == [5, 2] and next == i.position or (next == [5,3] and i.position == [6,3] and pos == [5,2]):
+                #     pdb.set_trace()
                 if (angle != 0 and angle > 1) or (angle != 0 and angle < 0): # This is setup this way to catch weird rounding errors that are less than 1 and register them as angles of 0
                     continue
                     # return True
 
-                elif i.moveChoose(pos) and self.collision(i, self, pos):
-                    # pdb.set_trace()
+                elif i.moveChoose(self.kingP.position) and not self.collision(i, self, self.kingP.position):
+                    if self.pieces[self.index(pos)].name.lower() == "p":
+                        if next == i.position and self.pieces[self.index(pos)].moveChoose(next, self.take) and player.possibleMoves.count(pos) == 1 and self.collision(self.pieces[self.index(pos)], player, next):
+                            return True
+                    elif next == i.position and self.pieces[self.index(pos)].moveChoose(next) and player.possibleMoves.count(pos) == 1 and self.collision(self.pieces[self.index(pos)], player, next):
+                        return True
+                    else:
+                        # pdb.set_trace()
+                        return False
                     return False
 
         return True
