@@ -23,7 +23,7 @@ def playerPrompt(color, start, check):
     colors = {True:"White", False:"Black"}
     if start:
         if check:
-            pdb.set_trace()
+            # pdb.set_trace()
             print( "|------------------------------|")
             print(f"|        Player {colors[color]}          |")
             print( "|------------------------------|")
@@ -50,7 +50,7 @@ def playerPrompt(color, start, check):
 
     else:
         if check:
-            pdb.set_trace()
+            # pdb.set_trace()
             print( "|------------------------------|")
             print(f"|        Player {colors[color]}          |")
             print( "|------------------------------|")
@@ -105,6 +105,8 @@ def chessGame(player1, player2):
                     continue
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
+                    player = True
+                    continue
 
                 userIn = trim(userIn)
 
@@ -147,6 +149,9 @@ def chessGame(player1, player2):
 
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
+                    player = True
+                    continue
+
                 userIn = trim(userIn)
 
                 if userIn == "error":
