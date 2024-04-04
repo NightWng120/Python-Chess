@@ -20,11 +20,13 @@ class Player():
     def movePiece(self, player, piece, next):
         self.possibleMoves.clear()
         # print(player.possibleMoves)
+        if piece.name == "b" and next == [6, 3]:
+            pdb.set_trace()
 
         if piece.name.lower() == "p":
-            print(piece.start)
-            if self.color and piece.position == [5,2] and (next == [6,3] or next == [5,3]):
-                pdb.set_trace()
+            # print(piece.start)
+            # if self.color and piece.position == [5,2] and (next == [6,3] or next == [5,3]):
+            #     pdb.set_trace()
 
             if self.take(player, next):
                 if piece.moveChoose(next, True) and self.collision(piece, player, next) and self.pieceLock(player, piece.position, next):
@@ -181,9 +183,11 @@ class Player():
             angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
 
             posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece postion and desired move
-            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next) # the sum of the distances between the current piece postion and desired move postion with another piece
+            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next)# the sum of the distances between the current piece postion and desired move postion with another piece
+            posToNext = math.trunc(posToNext*1000)/1000
+            distancesSum = math.trunc(distancesSum*1000)/1000
 
-            if (angle == 0 and posToNext == distancesSum) or (angle < 1 and angle > 0 and posToNext == distancesSum):
+            if (angle == 0 and posToNext == distancesSum) or (angle < 1 and angle > 0 and posToNext == distancesSum) or (angle > -1 and angle < 0 and posToNext == distancesSum):
                 return True
             else:
                 return False
@@ -259,10 +263,11 @@ class Player():
 
     def filterPossibleMoves(self, player):
         for i in self.pieces:
-            if i.name.lower() == "k": # temporay fix
+            if i.name.lower() == "k":
                 buffer = i.redSpot(player.possibleMoves)
-                continue
-            buffer = i.redSpot()
+            else:
+                buffer = i.redSpot()
+
             for j in buffer:
                 if self.collision( i, player, j):
                     # if i.name.lower() == "q":
