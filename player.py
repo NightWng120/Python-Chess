@@ -36,7 +36,7 @@ class Player():
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
                         if val.position == next:
                             playerPrev = player.pieces.pop(i)
-                            prev = piece.postion
+                            prev = piece.position
                             piece.position = next
                             player.filterPossibleMoves(self)
 
@@ -75,7 +75,7 @@ class Player():
                 return False
 
         elif piece.name.lower() == "k":
-            pdb.set_trace()
+            # pdb.set_trace()
             if self.take(player, next):
                 if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
                 # if piece.moveChoose(next, True) and self.collision(piece, player, next):
