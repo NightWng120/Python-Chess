@@ -1,4 +1,4 @@
-import player, board
+import player, board,pdb
 
 def trim(userIn):
     length = len(userIn)
@@ -19,29 +19,56 @@ def trim(userIn):
                 loop = False
     return userIn
 
-def playerPrompt(color, start):
+def playerPrompt(color, start, check):
     colors = {True:"White", False:"Black"}
     if start:
-        print( "|------------------------------|")
-        print(f"|        Player {colors[color]}          |")
-        print( "|------------------------------|")
-        print( "| Please enter the coordinates |")
-        print( "| of your desired move         |")
-        print( "|------------------------------|")
-        print( "|     e.g. - A1, A2 | a1 a2    |")
-        print( "|------------------------------|")
-        print(": ", end="")
-        userIn = input()
+        if check:
+            pdb.set_trace()
+            print( "|------------------------------|")
+            print(f"|        Player {colors[color]}          |")
+            print( "|------------------------------|")
+            print( "|    Your king is in check     |")
+            print( "|------------------------------|")
+            print( "| Please enter the coordinates |")
+            print( "| of your desired move         |")
+            print( "|------------------------------|")
+            print( "|     e.g. - A1, A2 | a1 a2    |")
+            print( "|------------------------------|")
+            print(": ", end="")
+            userIn = input()
+        else:
+            print( "|------------------------------|")
+            print(f"|        Player {colors[color]}          |")
+            print( "|------------------------------|")
+            print( "| Please enter the coordinates |")
+            print( "| of your desired move         |")
+            print( "|------------------------------|")
+            print( "|     e.g. - A1, A2 | a1 a2    |")
+            print( "|------------------------------|")
+            print(": ", end="")
+            userIn = input()
 
     else:
-        print( "|------------------------------|")
-        print(f"|        Player {colors[color]}          |")
-        print( "|------------------------------|")
-        print( "| Please enter the coordinates |")
-        print( "| of your desired move         |")
-        print( "|------------------------------|")
-        print(": ", end="")
-        userIn = input()
+        if check:
+            pdb.set_trace()
+            print( "|------------------------------|")
+            print(f"|        Player {colors[color]}          |")
+            print( "|------------------------------|")
+            print( "|    Your king is in check     |")
+            print( "|------------------------------|")
+            print( "|     e.g. - A1, A2 | a1 a2    |")
+            print( "|------------------------------|")
+            print(": ", end="")
+            userIn = input()
+        else:
+            print( "|------------------------------|")
+            print(f"|        Player {colors[color]}          |")
+            print( "|------------------------------|")
+            print( "| Please enter the coordinates |")
+            print( "| of your desired move         |")
+            print( "|------------------------------|")
+            print(": ", end="")
+            userIn = input()
 
     return userIn
 
@@ -65,17 +92,19 @@ def chessGame(player1, player2):
                 gameBoard.update(piecesAll)
                 gameBoard.printBoard()
                 piecesAll.clear()
-                player1.printPieces()
+                # player1.printPieces()
 
-                print("From player2")
+                # print("From player2")
                 # print(player2.possibleMoves)
-                userIn = playerPrompt(player1.color, start)
+                userIn = playerPrompt(player1.color, start, player1.kingP.check(player2.possibleMoves))
 
                 if userIn.lower() == "quit":
                     print()
                     print("Quitting current game")
                     game = False
                     continue
+                if userIn.lower() == "pdb":
+                    pdb.set_trace()
 
                 userIn = trim(userIn)
 
@@ -103,12 +132,12 @@ def chessGame(player1, player2):
                 gameBoard.update(piecesAll)
                 gameBoard.printBoard()
                 piecesAll.clear()
-                player2.printPieces()
+                # player2.printPieces()
 
-                print("From player1")
+                # print("From player1")
                 # print(player1.possibleMoves)
 
-                userIn = playerPrompt(player2.color, start)
+                userIn = playerPrompt(player2.color, start, player2.kingP.check(player1.possibleMoves))
 
                 if userIn.lower() == "quit":
                     print()
@@ -116,6 +145,8 @@ def chessGame(player1, player2):
                     game = False
                     continue
 
+                if userIn.lower() == "pdb":
+                    pdb.set_trace()
                 userIn = trim(userIn)
 
                 if userIn == "error":
@@ -138,168 +169,6 @@ def chessGame(player1, player2):
                 player = False
                 continue
  
-        # if start:
-        #     start = False
-        #     piecesAll = player1.pieces.copy()
-        #     for i in player2.pieces:
-        #         piecesAll.append(i)
-        #     gameBoard.update(piecesAll)
-        #     gameBoard.printBoard()
-        #     piecesAll.clear()
-        #     player1.printPieces()
-
-        #     print( "|------------------------------|")
-        #     print(f"|        Player 1 - {color[player1.color]}      |")
-        #     print( "|------------------------------|")
-        #     print( "| Please enter the coordinates |")
-        #     print( "| of your desired move         |")
-        #     print( "|------------------------------|")
-        #     print( "|     e.g. - A1, A2 | a1 a2    |")
-        #     print( "|------------------------------|")
-        #     print(": ", end="")
-
-        #     userIn = input()
-        #     if userIn == "quit":
-        #         print()
-        #         print("Quitting current game")
-        #         game = False
-        #         continue
-        #     userIn = trim(userIn)
-
-        #     bool1 = player1.movePiece(player2, player1.pieces[player1.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
-        #     if not bool1:
-        #         print()
-        #         print("***Invalid move***")
-        #         print()
-        #         start = True
-        #         continue
-
-        #     elif bool1:
-
-        #         piecesAll = player1.pieces.copy()
- 
-        # if start:
-        #     start = False
-        #     piecesAll = player1.pieces.copy()
-        #     for i in player2.pieces:
-        #         piecesAll.append(i)
-        #     gameBoard.update(piecesAll)
-        #     gameBoard.printBoard()
-        #     piecesAll.clear()
-        #     player1.printPieces()
-
-        #     print( "|------------------------------|")
-        #     print(f"|        Player 1 - {color[player1.color]}      |")
-        #     print( "|------------------------------|")
-        #     print( "| Please enter the coordinates |")
-        #     print( "| of your desired move         |")
-        #     print( "|------------------------------|")
-        #     print( "|     e.g. - A1, A2 | a1 a2    |")
-        #     print( "|------------------------------|")
-        #     print(": ", end="")
-
-        #     userIn = input()
-        #     if userIn == "quit":
-        #         print()
-        #         print("Quitting current game")
-        #         game = False
-        #         continue
-        #     userIn = trim(userIn)
-
-        #     bool1 = player1.movePiece(player2, player1.pieces[player1.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
-        #     if not bool1:
-        #         print()
-        #         print("***Invalid move***")
-        #         print()
-        #         start = True
-        #         continue
-
-        #     elif bool1:
-
-        #         piecesAll = player1.pieces.copy()
-        #         for i in player2.pieces:
-        #             piecesAll.append(i)
-        #         gameBoard.update(piecesAll)
-        #         gameBoard.printBoard()
-        #         piecesAll.clear()
-        #         player2.printPieces()
-        #         print( "|------------------------------|")
-        #         print(f"|        Player 2 - {color[player2.color]}      |")
-        #         print( "|------------------------------|")
-        #         print( "| Please enter the coordinates |")
-        #         print( "| of your desired move         |")
-        #         print( "|------------------------------|")
-        #         print( "|     e.g. - A1, A2 | a1,a2    |")
-        #         print( "|------------------------------|")
-        #         print(": ", end="")
-
-        #         userIn = input()
-        #         if userIn == "quit":
-        #             print()
-        #             print("Quitting current game")
-        #             game = False
-        #             continue
-        #         userIn = trim(userIn)
-        #         bool2 = player2.movePiece(player1, player2.pieces[player2.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
-        #         if bool2:
-        #             continue
-
-        # piecesAll = player1.pieces.copy()
-        # for i in player2.pieces:
-        #     piecesAll.append(i)
-        # gameBoard.update(piecesAll)
-        # gameBoard.printBoard()
-        # piecesAll.clear()
-        # player1.printPieces()
-        # print()
-        # print( "|------------------------------|")
-        # print(f"|        Player 1 - {color[player1.color]}      |")
-        # print( "|------------------------------|")
-        # print( "| Please enter the coordinates |")
-        # print( "| of your desired move         |")
-        # print( "|------------------------------|")
-        # print(": ", end="")
-
-        # userIn = input()
-
-        # if userIn == "quit":
-        #     print()
-        #     print("Quitting current game")
-        #     game = False
-        #     continue
-        # userIn = trim(userIn)
-
-        # bool1 = player1.movePiece(player2, player1.pieces[player1.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
-        # # print(f"Player 1 move return: {bool1}")
-        # if bool1:
-
-        #     piecesAll = player1.pieces.copy()
-        #     for i in player2.pieces:
-        #         piecesAll.append(i)
-        #     gameBoard.update(piecesAll)
-        #     gameBoard.printBoard()
-        #     piecesAll.clear()
-        #     player2.printPieces()
-        #     print()
-        #     print( "|------------------------------|")
-        #     print(f"|        Player 2 - {color[player2.color]}      |")
-        #     print( "|------------------------------|")
-        #     print( "| Please enter the coordinates |")
-        #     print( "| of your desired move         |")
-        #     print( "|------------------------------|")
-        #     print(": ", end="")
-
-        #     userIn = input()
-        #     if userIn == "quit":
-        #         print()
-        #         print("Quitting current game")
-        #         game = False
-        #         continue
-        #     userIn = trim(userIn)
-
-        #     bool2 = player2.movePiece(player1, player2.pieces[player2.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1]))
-        #     if bool2:
-        #         continue
 
 def main():
     main = True
