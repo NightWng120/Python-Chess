@@ -105,6 +105,8 @@ def chessGame(player1, player2):
                     continue
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
+                    player = True
+                    continue
 
                 userIn = trim(userIn)
 
@@ -147,6 +149,9 @@ def chessGame(player1, player2):
 
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
+                    player = True
+                    continue
+
                 userIn = trim(userIn)
 
                 if userIn == "error":
