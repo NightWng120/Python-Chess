@@ -22,12 +22,12 @@ class King(piece.Piece):
             return False
 
         if (abs(slope) == 1 and (dist > 1.3 and dist < 1.5)) or ((abs(slope) == 0 or abs(slope) == 100) and dist == 1):
-            for i in filteredPossibleMoves:
-                if i == next:
-                    print("Can't move onto a red spot")
+            if next in filteredPossibleMoves:
+                print("Can't move onto a red spot")
+                return False
                     # pdb.set_trace()
-                    return False
-            return True
+            else:
+                return True
 
         else:
             # print("Invalid move")
