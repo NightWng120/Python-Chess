@@ -108,7 +108,7 @@ class Player():
                 for i,val in enumerate(player.pieces):
                     if val.position == next:
                         playerPrev = player.pieces.pop(i)
-                        prev = piece.postion
+                        prev = piece.position
                         piece.position = next
                         player.filterPossibleMoves(self)
 
@@ -206,7 +206,7 @@ class Player():
 
     def isBetween(self, pos, next, inter):
         # determines if a piece is on an intersecting line between the current piece and a desired move location
-        # Returns true if there is a piece between the current postion and the next position
+        # Returns true if there is a piece between the current position and the next position
 
         vectorInter = [inter[0] - pos[0], inter[1] - pos[1]]
         vectorNext = [next[0] - pos[0], next[1] - pos[1]]
@@ -214,8 +214,8 @@ class Player():
         try:
             angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
 
-            posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece postion and desired move
-            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next)# the sum of the distances between the current piece postion and desired move postion with another piece
+            posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece position and desired move
+            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next)# the sum of the distances between the current piece position and desired move position with another piece
             posToNext = math.trunc(posToNext*1000)/1000
             distancesSum = math.trunc(distancesSum*1000)/1000
 
