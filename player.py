@@ -43,7 +43,7 @@ class Player():
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
                                 self.filterPossibleMoves(player)
-                                print("Your king would be in check!")
+                                # print("Your king would be in check!")
                                 return False
 
                             else:
@@ -62,7 +62,7 @@ class Player():
                 if self.kingP.check(player.possibleMoves):
                     piece.position = prev
                     self.filterPossibleMoves(player)
-                    print("Your king would be in check!")
+                    # print("Your king would be in check!")
                     return False
 
                 else:
@@ -88,7 +88,7 @@ class Player():
                             if self.kingP.check(player.possibleMoves):
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
-                                print("Your king would be in check!")
+                                # print("Your king would be in check!")
                                 self.filterPossibleMoves(player)
                                 return False
 
@@ -108,7 +108,7 @@ class Player():
                 if self.kingP.check(player.possibleMoves):
                     piece.position = prev
                     self.filterPossibleMoves(player)
-                    print("Your king would be in check!")
+                    # print("Your king would be in check!")
                     return False
 
                 else:
@@ -132,7 +132,7 @@ class Player():
                         if self.kingP.check(player.possibleMoves):
                             player.pieces.append(playerPrev)
                             piece.position = prev
-                            print("Your king would be in check!")
+                            # print("Your king would be in check!")
                             self.filterPossibleMoves(player)
                             return False
 
@@ -148,7 +148,7 @@ class Player():
                 if self.kingP.check(player.possibleMoves):
                     piece.position = prev
                     self.filterPossibleMoves(player)
-                    print("Your king would be in check!")
+                    # print("Your king would be in check!")
                     return False
 
                 else:
@@ -230,7 +230,8 @@ class Player():
         vectorNext = [next[0] - pos[0], next[1] - pos[1]]
 
         try:
-            angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
+            with numpy.errstate(invalid='ignore'):
+                angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
 
             posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece position and desired move
             distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next)# the sum of the distances between the current piece position and desired move position with another piece
