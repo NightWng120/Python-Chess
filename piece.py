@@ -5,6 +5,7 @@ class Piece():
     color = bool
     alive = bool
     position = list()
+    possibleMoves = list()
     name = string
 
 
@@ -51,10 +52,10 @@ class Piece():
         else:
             return math.sqrt((next[0] - pos[0])**2 + (next[1] - pos[1])**2)
 
-    def redSpot(self):
-        redSpots = list()
+    def moves(self):
+        moveList = list()
         for i in range(0,8):
             for j in range(0, 8):
                 if self.moveChoose([i, j]):
-                    redSpots.append([i, j])
-        return redSpots 
+                    moveList.append([i, j])
+        return moveList 

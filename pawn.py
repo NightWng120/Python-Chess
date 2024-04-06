@@ -58,10 +58,10 @@ class Pawn(piece.Piece):
         else:
             return False
 
-    def redSpot(self):
-        redSpots = list()
+    def moves(self):
+        moveList = list()
         for i in range(0,8):
             for j in range(0, 8):
                 if self.moveChoose([i, j], True): # set take to true to see all possible attacks
-                    redSpots.append([i, j])
-        return redSpots 
+                    moveList.append([i, j])
+        return moveList 
