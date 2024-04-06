@@ -25,7 +25,7 @@ def playerPrompt(color, start, check):
         if check:
             # pdb.set_trace()
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "|    Your king is in check     |")
             print( "|------------------------------|")
@@ -38,7 +38,7 @@ def playerPrompt(color, start, check):
             userIn = input()
         else:
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "| Please enter the coordinates |")
             print( "| of your desired move         |")
@@ -52,7 +52,7 @@ def playerPrompt(color, start, check):
         if check:
             # pdb.set_trace()
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "|    Your king is in check     |")
             print( "|------------------------------|")
@@ -62,7 +62,7 @@ def playerPrompt(color, start, check):
             userIn = input()
         else:
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "| Please enter the coordinates |")
             print( "| of your desired move         |")
@@ -149,7 +149,7 @@ def chessGame(player1, player2):
 
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
-                    player = True
+                    player = False
                     continue
 
                 userIn = trim(userIn)

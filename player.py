@@ -18,7 +18,6 @@ class Player():
 
 
     def movePiece(self, player, piece, next):
-        self.possibleMoves.clear()
         # print(player.possibleMoves)
         # if piece.name == "b" and next == [6, 3]:
         #     pdb.set_trace()
@@ -296,6 +295,7 @@ class Player():
         return True
 
     def filterPossibleMoves(self, player):
+        self.possibleMoves.clear()
         for i in self.pieces:
             if i.name.lower() == "k":
                 buffer = i.redSpot(player.possibleMoves)
