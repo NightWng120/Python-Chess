@@ -96,6 +96,7 @@ def chessGame(player1, player2):
 
                 # print("From player2")
                 # print(player2.possibleMoves)
+                player2.filterPossibleMoves(player1)
                 userIn = playerPrompt(player1.color, start, player1.kingP.check(player2.possibleMoves))
 
                 if userIn.lower() == "quit":
@@ -139,6 +140,7 @@ def chessGame(player1, player2):
                 # print("From player1")
                 # print(player1.possibleMoves)
 
+                player1.filterPossibleMoves(player2)
                 userIn = playerPrompt(player2.color, start, player2.kingP.check(player1.possibleMoves))
 
                 if userIn.lower() == "quit":
