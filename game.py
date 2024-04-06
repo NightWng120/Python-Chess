@@ -25,7 +25,7 @@ def playerPrompt(color, start, check):
         if check:
             # pdb.set_trace()
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "|    Your king is in check     |")
             print( "|------------------------------|")
@@ -38,7 +38,7 @@ def playerPrompt(color, start, check):
             userIn = input()
         else:
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "| Please enter the coordinates |")
             print( "| of your desired move         |")
@@ -52,7 +52,7 @@ def playerPrompt(color, start, check):
         if check:
             # pdb.set_trace()
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "|    Your king is in check     |")
             print( "|------------------------------|")
@@ -62,7 +62,7 @@ def playerPrompt(color, start, check):
             userIn = input()
         else:
             print( "|------------------------------|")
-            print(f"|        Player {colors[color]}          |")
+            print(f"|         Player {colors[color]}         |")
             print( "|------------------------------|")
             print( "| Please enter the coordinates |")
             print( "| of your desired move         |")
@@ -96,6 +96,7 @@ def chessGame(player1, player2):
 
                 # print("From player2")
                 # print(player2.possibleMoves)
+                player2.filterPossibleMoves(player1)
                 userIn = playerPrompt(player1.color, start, player1.kingP.check(player2.possibleMoves))
 
                 if userIn.lower() == "quit":
@@ -139,6 +140,7 @@ def chessGame(player1, player2):
                 # print("From player1")
                 # print(player1.possibleMoves)
 
+                player1.filterPossibleMoves(player2)
                 userIn = playerPrompt(player2.color, start, player2.kingP.check(player1.possibleMoves))
 
                 if userIn.lower() == "quit":
@@ -149,7 +151,7 @@ def chessGame(player1, player2):
 
                 if userIn.lower() == "pdb":
                     pdb.set_trace()
-                    player = True
+                    player = False
                     continue
 
                 userIn = trim(userIn)
