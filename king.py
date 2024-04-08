@@ -57,8 +57,8 @@ class King(piece.Piece):
 
     def stalemate(self, filteredPossibleMoves):
         # Returns True if king has no moves and isn't in check
-        moves = self.moves(filteredPossibleMoves)
-        if not self.check(filteredPossibleMoves) and not moves:
+        moveList = self.moves(filteredPossibleMoves)
+        if not self.check(filteredPossibleMoves) and not moveList:
             return True
         else:
             return False
