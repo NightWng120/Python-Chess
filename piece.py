@@ -12,6 +12,7 @@ class Piece():
 
     def __init__(self) -> None:
         self.alive = True
+        self.possibleMoves = []
 
     @abstractmethod
     def moveChoose(self, pos):
