@@ -1,4 +1,47 @@
-import player, board,pdb
+import player, board,pdb, copy
+
+# - Go through all of the pieces of the player in check
+# - Test each of its possible moves to see if it would stop their king from being in check
+# - Make sure to reset each of the player variables after each time a movePiece call is made
+
+def hasWon(white, black, player):
+    # if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
+    w = copy.deepcopy(white)
+    b = copy.deepcopy(black)
+    w.filterPossibleMoves(b)
+    b.filterPossibleMoves(w)
+
+    if player:
+        if w.kingP.stalemate(b.possibleMoves):
+            return False
+        for i,val in enumerate(white.pieces):
+            for j in w.pieces[i].possibleMoves:
+                # print("We out here in white")
+                if w.movePiece(b, w.pieces[i], j):
+                    if w.kingP.check(b.possibleMoves):
+                        w = copy.deepcopy(white)
+                        b = copy.deepcopy(black)
+                        continue
+                    else:
+                        return False
+    elif not player:
+        if b.kingP.stalemate(w.possibleMoves):
+            return False
+        for i,val in enumerate(black.pieces):
+            # print("We out here in black")
+            for j in b.pieces[i].possibleMoves:
+                if b.movePiece(w, b.pieces[i], j):
+                    if b.kingP.check(w.possibleMoves):
+                        b = copy.deepcopy(black)
+                        w = copy.deepcopy(white)
+                        continue
+                    else:
+                        return False
+    return True
+
+
+
+
 
 def trim(userIn):
     length = len(userIn)
@@ -79,9 +122,47 @@ def chessGame(playerW, playerB):
     gameBoard = board.Board()
     piecesAll = list()
     player = True
+    colors = {True: "White", False: "Black"}
 
 
     while game:
+        if playerW.kingP.stalemate(playerB.possibleMoves):
+            piecesAll = playerW.pieces.copy()
+            for i in playerB.pieces:
+                piecesAll.append(i)
+            gameBoard.update(piecesAll)
+            gameBoard.printBoard()
+            print()
+            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+            print()
+            game = False
+            continue
+
+        elif playerB.kingP.stalemate(playerW.possibleMoves):
+            piecesAll = playerW.pieces.copy()
+            for i in playerB.pieces:
+                piecesAll.append(i)
+            gameBoard.update(piecesAll)
+            gameBoard.printBoard()
+            print()
+            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+            print()
+            game = False
+            continue
+
+        elif hasWon(playerW, playerB, player):
+            piecesAll = playerW.pieces.copy()
+            for i in playerB.pieces:
+                piecesAll.append(i)
+            gameBoard.update(piecesAll)
+            gameBoard.printBoard()
+            print()
+            print(f"Checkmate! Player {colors[not player]} has won the game!")
+            print()
+            game = False
+            continue
+
+
 
         if player:
             try:
@@ -96,6 +177,7 @@ def chessGame(playerW, playerB):
 
                 # print("From playerB")
                 # print(playerB.possibleMoves)
+                # playerB.printPossibleMoves()
                 playerB.filterPossibleMoves(playerW)
                 userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves))
 
@@ -110,6 +192,7 @@ def chessGame(playerW, playerB):
                     continue
 
                 userIn = trim(userIn)
+                print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
                 if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
                     continue
@@ -140,6 +223,7 @@ def chessGame(playerW, playerB):
                 # print("From playerW")
                 # print(playerW.possibleMoves)
 
+                # playerW.printPossibleMoves()
                 playerW.filterPossibleMoves(playerB)
                 userIn = playerPrompt(playerB.color, start, playerB.kingP.check(playerW.possibleMoves))
 
@@ -156,9 +240,8 @@ def chessGame(playerW, playerB):
 
                 userIn = trim(userIn)
 
-                if userIn == "error":
-                    player = False
-                    continue
+
+                print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
                 if playerB.movePiece(playerW, playerB.pieces[playerB.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
                     start = False
