@@ -59,9 +59,13 @@ class Pawn(piece.Piece):
             return False
 
     def moves(self):
+        temp = self.start
         moveList = list()
         for i in range(0,8):
             for j in range(0, 8):
-                if self.moveChoose([i, j], True): # set take to true to see all possible attacks
+                if self.moveChoose([i, j], True):
                     moveList.append([i, j])
+                if self.moveChoose([i, j], False):
+                    moveList.append([i, j])
+        self.start = temp
         return moveList 
