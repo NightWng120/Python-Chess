@@ -282,18 +282,24 @@ class Player():
         self.possibleMoves.clear()
         for i in self.pieces:
             if i.name.lower() == "k":
-                buffer = i.redSpot(player.possibleMoves)
+                buffer = i.moves(player.possibleMoves)
             else:
-                buffer = i.redSpot()
+                buffer = i.moves()
 
+            i.possibleMoves.clear()
             for j in buffer:
                 if self.collision( i, player, j):
                     # if i.name.lower() == "q":
                     #     pdb.set_trace()
                     self.possibleMoves.append(j)
-            for i in self.pieces:
-                if i.position in self.possibleMoves:
-                    self.possibleMoves.remove(i.position)
+                    i.possibleMoves.append(j)
+            for k in self.pieces:
+                if k.position in self.possibleMoves:
+                    self.possibleMoves.remove(k.position)
+                if k.position in i.possibleMoves:
+                    i.possibleMoves.remove(k.position)
+
+            # print(f"{i.name}: {i.possibleMoves}")
 
 
 
@@ -317,3 +323,7 @@ class Player():
                 break
 
             print(f"{val.name}, ", end="")
+
+    def printPossibleMoves(self):
+        for i in self.pieces:
+            print(f"{i.name}: {i.possibleMoves}")
