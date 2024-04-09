@@ -178,6 +178,7 @@ def chessGame(playerW, playerB):
                 # print("From playerB")
                 # print(playerB.possibleMoves)
                 # playerB.printPossibleMoves()
+
                 playerB.filterPossibleMoves(playerW)
                 userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves))
 
