@@ -12,7 +12,7 @@ def hasWon(white, black, player):
     b.filterPossibleMoves(w)
 
     if player:
-        if w.kingP.stalemate(b.possibleMoves):
+        if w.stalemate(b.possibleMoves, w):
             return False
         for i,val in enumerate(white.pieces):
             for j in w.pieces[i].possibleMoves:
@@ -25,7 +25,7 @@ def hasWon(white, black, player):
                     else:
                         return False
     elif not player:
-        if b.kingP.stalemate(w.possibleMoves):
+        if b.stalemate(w.possibleMoves, b):
             return False
         for i,val in enumerate(black.pieces):
             # print("We out here in black")
@@ -126,31 +126,31 @@ def chessGame(playerW, playerB):
 
 
     while game:
-        if playerW.kingP.stalemate(playerB.possibleMoves):
-            piecesAll = playerW.pieces.copy()
-            for i in playerB.pieces:
-                piecesAll.append(i)
-            gameBoard.update(piecesAll)
-            gameBoard.printBoard()
-            print()
-            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
-            print()
-            game = False
-            continue
+        # if playerW.kingP.stalemate(playerB.possibleMoves):
+        #     piecesAll = playerW.pieces.copy()
+        #     for i in playerB.pieces:
+        #         piecesAll.append(i)
+        #     gameBoard.update(piecesAll)
+        #     gameBoard.printBoard()
+        #     print()
+        #     print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+        #     print()
+        #     game = False
+        #     continue
 
-        elif playerB.kingP.stalemate(playerW.possibleMoves):
-            piecesAll = playerW.pieces.copy()
-            for i in playerB.pieces:
-                piecesAll.append(i)
-            gameBoard.update(piecesAll)
-            gameBoard.printBoard()
-            print()
-            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
-            print()
-            game = False
-            continue
+        # elif playerB.kingP.stalemate(playerW.possibleMoves):
+        #     piecesAll = playerW.pieces.copy()
+        #     for i in playerB.pieces:
+        #         piecesAll.append(i)
+        #     gameBoard.update(piecesAll)
+        #     gameBoard.printBoard()
+        #     print()
+        #     print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+        #     print()
+        #     game = False
+        #     continue
 
-        elif hasWon(playerW, playerB, player):
+        if hasWon(playerW, playerB, player):
             piecesAll = playerW.pieces.copy()
             for i in playerB.pieces:
                 piecesAll.append(i)
