@@ -12,28 +12,32 @@ colors = {True:white, False:black}
 
 while count < 19:
 
+
     if user:
-        black.filterPossibleMoves(white)
         white.movePiece(black, white.pieces[white.index(stalemateTest[count][0])], stalemateTest[count][1])
+        black.filterPossibleMoves(white)
         user = not user
     else:
+        black.movePiece(white, black.pieces[black.index(stalemateTest[count][0])], stalemateTest[count][1])
         white.filterPossibleMoves(black)
-        white.movePiece(white, black.pieces[black.index(stalemateTest[count][0])], stalemateTest[count][1])
         user = not user
+
     count+=1
 
+    black.filterPossibleMoves(white)
+    white.filterPossibleMoves(black)
     piecesAll = white.pieces.copy()
     for i in black.pieces:
         piecesAll.append(i)
-
     gameboard.update(piecesAll)
     gameboard.printBoard()
     piecesAll.clear()
-    print(f"{colors[user].kingP.stalemate(colors[not user].possibleMoves)}")
-    print(f"{game.hasWon(white, black, user)}")
-    print(f"{colors[user].kingP.check(colors[not user].possibleMoves)}")
+
     if count == 19:
         pdb.set_trace()
-    print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
-    print(f"{user}")
+    print(f"stalemate: {colors[user].stalemate(colors[not user].possibleMoves, black)}")
+    print(f"hasWon: {game.hasWon(white, black, user)}")
+    # print(f"{colors[user].kingP.check(colors[not user].possibleMoves)}")
+    # print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
+    print(f"Player: {user}")
         
