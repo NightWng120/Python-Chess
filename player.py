@@ -1,4 +1,4 @@
-import king, queen, rook, knight, bishop, pawn, piece, math, numpy, pdb
+import king, queen, rook, knight, bishop, pawn, piece, math, numpy, pdb, copy
 class Player():
     possibleMoves = list()
     color = bool
@@ -327,3 +327,19 @@ class Player():
     def printPossibleMoves(self):
         for i in self.pieces:
             print(f"{i.name}: {i.possibleMoves}")
+
+    def stalemate(self, filteredPossibleMoves, player):
+        # Returns True if king has no moves and isn't in check
+        thisPlayer = copy.deepcopy(self)
+        thatPlayer = copy.deepcopy(player)
+        for i in thisPlayer.pieces:
+            for j in i.possibleMoves:
+                if thisPlayer.movePiece(thatPlayer, i, j):
+                    return False
+                thisPlayer = copy.deepcopy(self)
+                thatPlayer = copy.deepcopy(player)
+        # print(self.kingP.possibleMoves)
+        if not self.kingP.check(filteredPossibleMoves) and not self.kingP.possibleMoves:
+            return True
+        else:
+            return False
