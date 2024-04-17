@@ -12,8 +12,6 @@ def hasWon(white, black, player):
     b.filterPossibleMoves(w)
 
     if player:
-        if w.stalemate(b.possibleMoves, w):
-            return False
         for i,val in enumerate(white.pieces):
             for j in w.pieces[i].possibleMoves:
                 # print("We out here in white")
@@ -25,8 +23,6 @@ def hasWon(white, black, player):
                     else:
                         return False
     elif not player:
-        if b.stalemate(w.possibleMoves, b):
-            return False
         for i,val in enumerate(black.pieces):
             # print("We out here in black")
             for j in b.pieces[i].possibleMoves:
@@ -193,7 +189,7 @@ def chessGame(playerW, playerB):
                     continue
 
                 userIn = trim(userIn)
-                print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
+                # print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
                 if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
                     continue
@@ -242,7 +238,7 @@ def chessGame(playerW, playerB):
                 userIn = trim(userIn)
 
 
-                print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
+                # print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
                 if playerB.movePiece(playerW, playerB.pieces[playerB.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
                     start = False
