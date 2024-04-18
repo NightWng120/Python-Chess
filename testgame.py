@@ -37,17 +37,25 @@ with open('input.txt', 'r') as f:
 data = data[0].split('\n')
 data.pop()
 data = data[0].split(',')
-print(data)
+# print(data)
 
 
+piecesAll = white.pieces.copy()
+for i in black.pieces:
+    piecesAll.append(i)
+gameboard.update(piecesAll)
+gameboard.printBoard()
+piecesAll.clear()
 for i in data:
 
 
     if user:
+        print(f": {i}")
         white.movePiece(black, white.pieces[white.index(gameboard.inputToPos(game.trim(i)[0]))], gameboard.inputToPos(game.trim(i)[1]))
         black.filterPossibleMoves(white)
         user = not user
     else:
+        print(f": {i}")
         black.movePiece(white, black.pieces[black.index(gameboard.inputToPos(game.trim(i)[0]))], gameboard.inputToPos(game.trim(i)[1]))
         white.filterPossibleMoves(black)
         user = not user
@@ -63,7 +71,7 @@ for i in data:
     piecesAll.clear()
 
     # print(f"stalemate: {black.stalemate(white.possibleMoves, white)}")
-    print(f"hasWon: {game.hasWon(white, black, user)}")
-    print(f"Player {players[user]} is in check: {colors[user].kingP.check(colors[not user].possibleMoves)}")
+    # print(f"hasWon: {game.hasWon(white, black, user)}")
+    # print(f"Player {players[user]} is in check: {colors[user].kingP.check(colors[not user].possibleMoves)}")
     # print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
     # print(f"Player: {user}")
