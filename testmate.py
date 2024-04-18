@@ -1,4 +1,4 @@
-import player, board,pdb, copy, game
+import player, board, game
 
 user = True
 count = 0
@@ -33,9 +33,7 @@ while count < 19:
     gameboard.printBoard()
     piecesAll.clear()
 
-    if count == 19:
-        pdb.set_trace()
-    print(f"stalemate: {colors[user].stalemate(colors[not user].possibleMoves, black)}")
+    print(f"stalemate: {black.stalemate(white.possibleMoves, white)}")
     print(f"hasWon: {game.hasWon(white, black, user)}")
     # print(f"{colors[user].kingP.check(colors[not user].possibleMoves)}")
     # print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
