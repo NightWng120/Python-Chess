@@ -18,21 +18,22 @@ class Player():
 
 
     def movePiece(self, player, piece, next):
-        # print(player.possibleMoves)
-        # if piece.name == "b" and next == [6, 3]:
-        #     pdb.set_trace()
+        # Tries to move a piece on the board and returns
+        # true if a piece is moved
 
 
 
         if piece.name.lower() == "p":
-            # print(piece.start)
-            # if self.color and piece.position == [5,2] and (next == [6,3] or next == [5,3]):
-            #     pdb.set_trace()
+            # Have to account for pawn pieces because
+            # they have an extra parameter for the moveChoose method 
+
 
             if self.take(player, next):
                 if piece.moveChoose(next, True) and self.collision(piece, player, next):
                 # if piece.moveChoose(next, True) and self.collision(piece, player, next):
-                    for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
+                    for i,val in enumerate(player.pieces): # could technically return None if next doesn't correspond with a piece on the board somehow
+
+                        # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                         if val.position == next:
                             playerPrev = player.pieces.pop(i)
                             prev = piece.position
@@ -54,7 +55,7 @@ class Player():
                     return False
 
             elif piece.moveChoose(next, False) and self.collision(piece, player, next):
-            # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
+                # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                 prev = piece.position
                 piece.position = next
                 player.filterPossibleMoves(self)
@@ -74,11 +75,14 @@ class Player():
                 return False
 
         elif piece.name.lower() == "k":
-            # pdb.set_trace()
+            # Have to account for king pieces because
+            # they have an extra parameter for the moveChoose method 
+
             if self.take(player, next):
                 if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
-                # if piece.moveChoose(next, True) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
+
+                        # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                         if val.position == next:
                             playerPrev = player.pieces.pop(i)
                             prev = piece.position
@@ -100,7 +104,7 @@ class Player():
                     return False
 
             elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
-            # elif piece.moveChoose(next, False) and self.collision(piece, player, next):
+                # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                 prev = piece.position
                 piece.position = next
                 player.filterPossibleMoves(self)
@@ -120,9 +124,10 @@ class Player():
 
 
         elif piece.moveChoose(next) and self.collision(piece, player, next):
-        # elif piece.moveChoose(next) and self.collision(piece, player, next):
             if self.take(player, next):
                 for i,val in enumerate(player.pieces):
+
+                    # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                     if val.position == next:
                         playerPrev = player.pieces.pop(i)
                         prev = piece.position
@@ -141,6 +146,7 @@ class Player():
                             return True
 
             else:
+                # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                 prev = piece.position
                 piece.position = next
                 player.filterPossibleMoves(self)
@@ -160,6 +166,8 @@ class Player():
             return False
 
     def initPieces(self):
+        # Sets default positions for all pieces of type self.color
+
         self.kingP = king.King(self.color)
         self.queenP = queen.Queen(self.color)
         self.pieces = list()
@@ -231,10 +239,10 @@ class Player():
 
         try:
             with numpy.errstate(invalid='ignore'):
-                angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext))))
+                angle = numpy.degrees(numpy.arccos(self.dotproduct2d(vectorInter, vectorNext)/abs(self.magnetude2d(vectorInter) * self.magnetude2d(vectorNext)))) # computes angle in degrees between the Inter and Next vectors
 
             posToNext = piece.Piece.dist(piece.Piece(), pos, next) # distance between current piece position and desired move
-            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next)# the sum of the distances between the current piece position and desired move position with another piece
+            distancesSum = piece.Piece.dist(piece.Piece(), pos, inter) + piece.Piece.dist(piece.Piece(), inter, next) # the sum of the distances between the current piece position and desired move position with another piece
             posToNext = math.trunc(posToNext*1000)/1000
             distancesSum = math.trunc(distancesSum*1000)/1000
 
@@ -244,7 +252,7 @@ class Player():
                 return False
 
         except ZeroDivisionError:
-            # print("Zero divison error")
+            # print("Zero division error")
             return False
 
 
@@ -289,8 +297,6 @@ class Player():
             i.possibleMoves.clear()
             for j in buffer:
                 if self.collision( i, player, j):
-                    # if i.name.lower() == "q":
-                    #     pdb.set_trace()
                     self.possibleMoves.append(j)
                     i.possibleMoves.append(j)
             for k in self.pieces:
@@ -298,10 +304,6 @@ class Player():
                     self.possibleMoves.remove(k.position)
                 if k.position in i.possibleMoves:
                     i.possibleMoves.remove(k.position)
-
-            # print(f"{i.name}: {i.possibleMoves}")
-
-
 
     def take(self, player, next):
         for i in player.pieces:
@@ -314,7 +316,7 @@ class Player():
             if val.position == pos: 
                 return i
 
-        return -1
+        return None
 
     def printPieces(self):
         for i, val in enumerate(self.pieces):
@@ -330,12 +332,14 @@ class Player():
 
     def stalemate(self, filteredPossibleMoves, player):
         # Returns True if king has no moves and isn't in check
+
         thisPlayer = copy.deepcopy(self)
         thatPlayer = copy.deepcopy(player)
         for i in thisPlayer.pieces:
             for j in i.possibleMoves:
                 if thisPlayer.movePiece(thatPlayer, i, j):
-                    return False
+                    if thisPlayer.index(j) != None:
+                        return False
                 thisPlayer = copy.deepcopy(self)
                 thatPlayer = copy.deepcopy(player)
         # print(self.kingP.possibleMoves)
