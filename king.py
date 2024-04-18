@@ -33,13 +33,13 @@ class King(piece.Piece):
             # print("Invalid move")
             return False
 
-    def redSpot(self, filteredPossibleMoves):
-        redSpots = list()
+    def moves(self, filteredPossibleMoves):
+        moveList = list()
         for i in range(0,8):
             for j in range(0, 8):
                 if self.moveChoose([i, j], filteredPossibleMoves):
-                    redSpots.append([i, j])
-        return redSpots 
+                    moveList.append([i, j])
+        return moveList 
     
     def check(self, filteredPossibleMoves):
         # Returns True if the king's position equals
@@ -51,14 +51,7 @@ class King(piece.Piece):
 
     def mate(self, filteredPossibleMoves): 
         # Returns True if king has no moves and is in check
-        moves = self.redSpot(filteredPossibleMoves)
+        moves = self.moves(filteredPossibleMoves)
         if not moves and self.check(filteredPossibleMoves):
             return True
 
-    def stalemate(self, filteredPossibleMoves):
-        # Returns True if king has no moves and isn't in check
-        moves = self.redSpot(filteredPossibleMoves)
-        if not self.check(filteredPossibleMoves) and not moves:
-            return True
-        else:
-            return False
