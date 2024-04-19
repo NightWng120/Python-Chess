@@ -122,29 +122,29 @@ def chessGame(playerW, playerB):
 
 
     while game:
-        # if playerW.kingP.stalemate(playerB.possibleMoves):
-        #     piecesAll = playerW.pieces.copy()
-        #     for i in playerB.pieces:
-        #         piecesAll.append(i)
-        #     gameBoard.update(piecesAll)
-        #     gameBoard.printBoard()
-        #     print()
-        #     print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
-        #     print()
-        #     game = False
-        #     continue
+        if playerW.stalemate(playerB.possibleMoves, playerB) and start != True:
+            piecesAll = playerW.pieces.copy()
+            for i in playerB.pieces:
+                piecesAll.append(i)
+            gameBoard.update(piecesAll)
+            gameBoard.printBoard()
+            print()
+            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+            print()
+            game = False
+            continue
 
-        # elif playerB.kingP.stalemate(playerW.possibleMoves):
-        #     piecesAll = playerW.pieces.copy()
-        #     for i in playerB.pieces:
-        #         piecesAll.append(i)
-        #     gameBoard.update(piecesAll)
-        #     gameBoard.printBoard()
-        #     print()
-        #     print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
-        #     print()
-        #     game = False
-        #     continue
+        elif playerB.stalemate(playerW.possibleMoves, playerW) and start != True:
+            piecesAll = playerW.pieces.copy()
+            for i in playerB.pieces:
+                piecesAll.append(i)
+            gameBoard.update(piecesAll)
+            gameBoard.printBoard()
+            print()
+            print(f"Stalemate! Player {colors[player]}'s king cannot move and isn't in check!")
+            print()
+            game = False
+            continue
 
         if hasWon(playerW, playerB, player):
             piecesAll = playerW.pieces.copy()
@@ -191,8 +191,15 @@ def chessGame(playerW, playerB):
                 userIn = trim(userIn)
                 # print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
-                if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
-                    continue
+                if playerW.index(gameBoard.inputToPos(userIn[0])) != None:
+                    if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
+                        continue
+                    else:
+                        print()
+                        print("***Invalid move***")
+                        print()
+                        player = True
+                        continue
                 else:
                     print()
                     print("***Invalid move***")
@@ -240,9 +247,16 @@ def chessGame(playerW, playerB):
 
                 # print(f"inputToPos position: {gameBoard.inputToPos(userIn[0])}\ninputToPos next: {gameBoard.inputToPos(userIn[1])}")
 
-                if playerB.movePiece(playerW, playerB.pieces[playerB.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
-                    start = False
-                    continue
+                if playerB.index(gameBoard.inputToPos(userIn[0])) != None:
+                    if playerB.movePiece(playerW, playerB.pieces[playerB.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
+                        start = False
+                        continue
+                    else:
+                        print()
+                        print("***Invalid move***")
+                        print()
+                        player = False
+                        continue
                 else:
                     print()
                     print("***Invalid move***")
