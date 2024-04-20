@@ -1,0 +1,1 @@
+F2 f4,E7 e5, H2 h4,H7 h6, C2 c3,C7 c5, E1 f2,E8 e7, F4 e5,B7 b6, D1 c2,H8 h7, F2 e3,A7 a5, H4 h5,C5 c4, C2 f5,G8 f6, D2 d4,A5 a4

@@ -32,7 +32,7 @@ white = player.Player(True)
 black = player.Player(False)
 colors = {True:white, False:black}
 players = {True:"white", False:"black"}
-with open('input.txt', 'r') as f:
+with open('test3.txt', 'r') as f:
     data = f.readlines()
 data = data[0].split('\n')
 data.pop()

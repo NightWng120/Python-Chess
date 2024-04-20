@@ -1,0 +1,1 @@
+F2 f4,G8 h6, G2 g3,B8 c6, H2 h3,A7 a5, G1 f3,H6 g8, F3 h4,H7 h5, D2 d3,G7 g6, B1 c3,H8 h7, A2 a4,B7 b5, A1 b1,B5 a4, C3 e4,A8 b8, H1 h2,G8 f6, E4 c5,C6 a7, C5 b7,D7 d5, H2 f2,D8 d7, B2 b3,F6 e4, B1 a1,A4 a3, F2 h2,G6 g5, C1 b2,E4 d2, A1 a3,G5 h4, A3 a4,F7 f5, F1 g2,H7 g7, B2 f6,D7 a4, G2 d5,A4 b3, F6 a1,B3 b4
