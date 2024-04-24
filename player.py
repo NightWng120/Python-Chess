@@ -347,3 +347,113 @@ class Player():
             return True
         else:
             return False
+
+    # NOTES
+    # **Castling postiions for White**
+    #	**Queen Side**
+    #       General movement:
+    #	    - [1, 0], [2, 0], [3, 0]
+    #       King movement:
+    #	    - [3, 0], [2, 0]
+    #	    Ending positions for each piece:
+    #	    - King: [2, 0]
+    #	    - Rook: [3, 0]
+    	    
+    #	**King Side**
+    #       General movement:
+    #	    - [6, 0], [5, 0]
+    #       King movement:
+    #	    - [5, 0], [6, 0]
+    #	    Ending positions for each piece:
+    #	    - King: [6, 0]
+    #	    - Rook: [5, 0]
+
+    # **Castling postiions for Black**
+    #	**Queen Side**
+    #       General movement:
+    #	    - [1, 7], [2, 7], [3, 7]
+    #       King movement:
+    #	    - [3, 7], [2, 7]
+    #	    Ending positions for each piece:
+    #	    - King: [2, 7]
+    #	    - Rook: [3, 7]
+
+    #	**King Side**
+    #       General movement:
+    #	    - [6, 7], [5, 7]
+    #       King movement:
+    #	    - [3, 7], [2, 7]
+    #	    Ending positions for each piece:
+    #	    - King: [6, 7]
+    #	    - Rook: [5, 7]
+
+
+
+    # castle method requirements
+    # - Needs to make sure there are no pieces in between the king and the rook
+    # - Need to check if king is in check before moving
+    # - Checks to see if the king is moving through the path of an enemy piece
+    # - Have to be able to castle on king or queen side
+
+    # Possible approaches
+    # **Manual checking**
+    #	- Making sure the king is not in check
+    #   - Making sure each of the pieces from the chosen side haven't moved from their starting positions
+    #   - Checking if there are pieces in all of the specified castling positions
+    #	- Checking if possible moves that appear in the castling path are valid
+    #	- Making sure to only do the checking for possible moves for spaces the king moves through
+    #	- Removing each of the piece objects from the pieces arraylist and putting them on the chosen side if all conditions are met
+
+    def castleCheck(self, player, side):
+        # True is left, False is right
+        positionsSelf = [i.position for i in self.pieces]
+        positionsOpponent = [i.position for i in player.pieces]
+
+        if self.color:
+            y = 0
+        else:
+            y = 7
+
+        positionsQ = [[1, y], [2, y], [3, y]]
+        positionsK = [[5, y], [6, y]]
+
+        if side:
+            for i in positionsQ:
+                if i in positionsSelf or i in positionsOpponent:
+                    return False
+        else:
+            for i in positionsK:
+                if i in positionsSelf or i in positionsOpponent:
+                    return False
+
+        # For possible double checking a possible move in player class
+        # for i in player.possibleMoves:
+        #     if side:
+        #         if i in positionsQ:
+        #         elif i in positionsK:
+        #     else:
+        #         if i in positionsQ:
+        #         elif i in positionsK:
+
+        for i in player.possibleMoves:
+            if i in positionsQ:
+                return False
+            elif i in positionsK:
+                return False
+        return True
+
+
+
+    def castleMove(self, side):
+        if self.color:
+            y = 0
+        else:
+            y = 1
+
+        if side:
+            self.kingP.position = [2, y]
+            self.rooks[0].position = [3, y]
+        else:
+            self.kingP.position = [6, y]
+            self.rooks[1].position = [5, y]
+
