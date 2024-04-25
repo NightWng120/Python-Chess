@@ -78,7 +78,13 @@ class Player():
             # Have to account for king pieces because
             # they have an extra parameter for the moveChoose method 
 
-            if self.take(player, next):
+            if piece.dist(piece.position, next) == 2 and self.castleCheck(player, piece, next):
+                self.castleMove(piece, next)
+                player.filterPossibleMoves(self)
+                self.filterPossibleMoves(player)
+                return True
+
+            elif self.take(player, next):
                 if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
 
@@ -404,47 +410,55 @@ class Player():
     #	- Making sure to only do the checking for possible moves for spaces the king moves through
     #	- Removing each of the piece objects from the pieces arraylist and putting them on the chosen side if all conditions are met
 
-    def castleCheck(self, player, side):
+    def castleCheck(self, player, piece, next):
         # True is left, False is right
-        positionsSelf = [i.position for i in self.pieces]
-        positionsOpponent = [i.position for i in player.pieces]
 
-        if self.color:
-            y = 0
-        else:
-            y = 7
+        if piece.name.lower() == "k" and piece.dist(piece.position, next) == 2 and next[1] == piece.position[1]:
+            side = True if piece.position[0] > next[0] else False
+            positionsSelf = [i.position for i in self.pieces]
+            positionsOpponent = [i.position for i in player.pieces]
 
-        positionsQ = [[1, y], [2, y], [3, y]]
-        positionsK = [[5, y], [6, y]]
+            if self.color:
+                y = 0
+            else:
+                y = 7
 
-        if side:
-            for i in positionsQ:
-                if i in positionsSelf or i in positionsOpponent:
+            positionsQ = [[1, y], [2, y], [3, y]]
+            positionsK = [[5, y], [6, y]]
+
+            if side:
+                for i in positionsQ:
+                    if i in positionsSelf or i in positionsOpponent:
+                        return False
+            else:
+                for i in positionsK:
+                    if i in positionsSelf or i in positionsOpponent:
+                        return False
+
+            # For possible double checking a possible move in player class
+            # for i in player.possibleMoves:
+            #     if side:
+            #         if i in positionsQ:
+            #         elif i in positionsK:
+            #     else:
+            #         if i in positionsQ:
+            #         elif i in positionsK:
+
+            for i in player.possibleMoves:
+                if i in positionsQ:
                     return False
-        else:
-            for i in positionsK:
-                if i in positionsSelf or i in positionsOpponent:
+                elif i in positionsK:
                     return False
+            return True
 
-        # For possible double checking a possible move in player class
-        # for i in player.possibleMoves:
-        #     if side:
-        #         if i in positionsQ:
-        #         elif i in positionsK:
-        #     else:
-        #         if i in positionsQ:
-        #         elif i in positionsK:
-
-        for i in player.possibleMoves:
-            if i in positionsQ:
-                return False
-            elif i in positionsK:
-                return False
-        return True
+        else:
+            return False
 
 
 
-    def castleMove(self, side):
+    def castleMove(self, piece, next):
+        side = True if piece.position[0] > next[0] else False
+
         if self.color:
             y = 0
         else:
