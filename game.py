@@ -16,7 +16,7 @@ def hasWon(white, black, player):
             for j in w.pieces[i].possibleMoves:
                 # print("We out here in white")
                 if w.movePiece(b, w.pieces[i], j):
-                    if w.kingP.check(b.possibleMoves):
+                    if w.kingP.check(b.possibleMoves, w, b):
                         w = copy.deepcopy(white)
                         b = copy.deepcopy(black)
                         continue
@@ -27,7 +27,7 @@ def hasWon(white, black, player):
             # print("We out here in black")
             for j in b.pieces[i].possibleMoves:
                 if b.movePiece(w, b.pieces[i], j):
-                    if b.kingP.check(w.possibleMoves):
+                    if b.kingP.check(w.possibleMoves, b, w):
                         b = copy.deepcopy(black)
                         w = copy.deepcopy(white)
                         continue
@@ -184,7 +184,7 @@ def chessGame(playerW, playerB):
                     game = False
                     continue
                 if userIn.lower() == "pdb":
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     player = True
                     continue
 
@@ -238,7 +238,7 @@ def chessGame(playerW, playerB):
                     continue
 
                 if userIn.lower() == "pdb":
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     player = False
                     continue
 
