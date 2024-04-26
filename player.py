@@ -40,7 +40,7 @@ class Player():
                             piece.position = next
                             player.filterPossibleMoves(self)
 
-                            if self.kingP.check(player.possibleMoves):
+                            if self.kingP.check(player.possibleMoves, self, player):
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
                                 self.filterPossibleMoves(player)
@@ -60,7 +60,7 @@ class Player():
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -78,14 +78,18 @@ class Player():
             # Have to account for king pieces because
             # they have an extra parameter for the moveChoose method 
 
-            if piece.dist(piece.position, next) == 2 and self.castleCheck(player, piece, next):
-                self.castleMove(piece, next)
-                player.filterPossibleMoves(self)
-                self.filterPossibleMoves(player)
-                return True
+            if piece.dist(piece.position, next) == 2:
+                
+                if self.castleCheck(player, piece, next):
+                    self.castleMove(piece, next)
+                    player.filterPossibleMoves(self)
+                    self.filterPossibleMoves(player)
+                    return True
+                else:
+                    return False
 
             elif self.take(player, next):
-                if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
+                if piece.moveChoose(next, player.possibleMoves, player) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
 
                         # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
@@ -95,7 +99,7 @@ class Player():
                             piece.position = next
                             player.filterPossibleMoves(self)
 
-                            if self.kingP.check(player.possibleMoves):
+                            if self.kingP.check(player.possibleMoves, self, player):
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
                                 # print("Your king would be in check!")
@@ -109,13 +113,14 @@ class Player():
                     self.filterPossibleMoves(player)
                     return False
 
-            elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
+            elif piece.moveChoose(next, player.possibleMoves, player) and self.collision(piece, player, next):
                 # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                 prev = piece.position
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
+                    # breakpoint()
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -126,6 +131,7 @@ class Player():
                     return True
             else:
                 self.filterPossibleMoves(player)
+                # breakpoint()
                 return False
 
 
@@ -140,7 +146,7 @@ class Player():
                         piece.position = next
                         player.filterPossibleMoves(self)
 
-                        if self.kingP.check(player.possibleMoves):
+                        if self.kingP.check(player.possibleMoves, self, player):
                             player.pieces.append(playerPrev)
                             piece.position = prev
                             # print("Your king would be in check!")
@@ -157,7 +163,7 @@ class Player():
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -296,7 +302,7 @@ class Player():
         self.possibleMoves.clear()
         for i in self.pieces:
             if i.name.lower() == "k":
-                buffer = i.moves(player.possibleMoves)
+                buffer = i.moves(player.possibleMoves, player)
             else:
                 buffer = i.moves()
 
@@ -349,7 +355,7 @@ class Player():
                 thisPlayer = copy.deepcopy(self)
                 thatPlayer = copy.deepcopy(player)
         # print(self.kingP.possibleMoves)
-        if not self.kingP.check(filteredPossibleMoves) and not self.kingP.possibleMoves:
+        if not self.kingP.check(filteredPossibleMoves, self, player) and not self.kingP.possibleMoves:
             return True
         else:
             return False
@@ -444,11 +450,14 @@ class Player():
             #         if i in positionsQ:
             #         elif i in positionsK:
 
-            for i in player.possibleMoves:
-                if i in positionsQ:
-                    return False
-                elif i in positionsK:
-                    return False
+            thisPlayer = copy.deepcopy(self)
+            thatPlayer = copy.deepcopy(player)
+            for j in thatPlayer.pieces:
+                for i in j.possibleMoves:
+                    if i in positionsQ and thatPlayer.movePiece(thisPlayer, j, piece.position):
+                        return False
+                    elif i in positionsK and thatPlayer.movePiece(thisPlayer, j, piece.position):
+                        return False
             return True
 
         else:
@@ -462,7 +471,7 @@ class Player():
         if self.color:
             y = 0
         else:
-            y = 1
+            y = 7
 
         if side:
             self.kingP.position = [2, y]
