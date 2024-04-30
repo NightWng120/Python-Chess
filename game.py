@@ -10,6 +10,10 @@ def hasWon(white, black, player):
     b = copy.deepcopy(black)
     w.filterPossibleMoves(b)
     b.filterPossibleMoves(w)
+    colors = {True:white, False:black}
+
+    if not colors[player].kingP.check(colors[not player].possibleMoves, colors[player], colors[not player]):
+        return False
 
     if player:
         for i,val in enumerate(white.pieces):
@@ -33,10 +37,10 @@ def hasWon(white, black, player):
                         continue
                     else:
                         return False
-    return True
-
-
-
+    if colors[player].kingP.check(colors[not player].possibleMoves, colors[player], colors[not player]):
+        return True
+    else:
+        return False
 
 
 def trim(userIn):
@@ -176,7 +180,7 @@ def chessGame(playerW, playerB):
                 # playerB.printPossibleMoves()
 
                 playerB.filterPossibleMoves(playerW)
-                userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves))
+                userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves, playerW, playerB))
 
                 if userIn.lower() == "quit":
                     print()
@@ -229,7 +233,7 @@ def chessGame(playerW, playerB):
 
                 # playerW.printPossibleMoves()
                 playerW.filterPossibleMoves(playerB)
-                userIn = playerPrompt(playerB.color, start, playerB.kingP.check(playerW.possibleMoves))
+                userIn = playerPrompt(playerB.color, start, playerB.kingP.check(playerW.possibleMoves, playerB, playerW))
 
                 if userIn.lower() == "quit":
                     print()
