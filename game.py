@@ -10,13 +10,17 @@ def hasWon(white, black, player):
     b = copy.deepcopy(black)
     w.filterPossibleMoves(b)
     b.filterPossibleMoves(w)
+    colors = {True:white, False:black}
+
+    if not colors[player].kingP.check(colors[not player].possibleMoves, colors[player], colors[not player]):
+        return False
 
     if player:
         for i,val in enumerate(white.pieces):
             for j in w.pieces[i].possibleMoves:
                 # print("We out here in white")
                 if w.movePiece(b, w.pieces[i], j):
-                    if w.kingP.check(b.possibleMoves):
+                    if w.kingP.check(b.possibleMoves, w, b):
                         w = copy.deepcopy(white)
                         b = copy.deepcopy(black)
                         continue
@@ -27,16 +31,16 @@ def hasWon(white, black, player):
             # print("We out here in black")
             for j in b.pieces[i].possibleMoves:
                 if b.movePiece(w, b.pieces[i], j):
-                    if b.kingP.check(w.possibleMoves):
+                    if b.kingP.check(w.possibleMoves, b, w):
                         b = copy.deepcopy(black)
                         w = copy.deepcopy(white)
                         continue
                     else:
                         return False
-    return True
-
-
-
+    if colors[player].kingP.check(colors[not player].possibleMoves, colors[player], colors[not player]):
+        return True
+    else:
+        return False
 
 
 def trim(userIn):
@@ -176,7 +180,7 @@ def chessGame(playerW, playerB):
                 # playerB.printPossibleMoves()
 
                 playerB.filterPossibleMoves(playerW)
-                userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves))
+                userIn = playerPrompt(playerW.color, start, playerW.kingP.check(playerB.possibleMoves, playerW, playerB))
 
                 if userIn.lower() == "quit":
                     print()
@@ -184,7 +188,7 @@ def chessGame(playerW, playerB):
                     game = False
                     continue
                 if userIn.lower() == "pdb":
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     player = True
                     continue
 
@@ -229,7 +233,7 @@ def chessGame(playerW, playerB):
 
                 # playerW.printPossibleMoves()
                 playerW.filterPossibleMoves(playerB)
-                userIn = playerPrompt(playerB.color, start, playerB.kingP.check(playerW.possibleMoves))
+                userIn = playerPrompt(playerB.color, start, playerB.kingP.check(playerW.possibleMoves, playerB, playerW))
 
                 if userIn.lower() == "quit":
                     print()
@@ -238,7 +242,7 @@ def chessGame(playerW, playerB):
                     continue
 
                 if userIn.lower() == "pdb":
-                    pdb.set_trace()
+                    # pdb.set_trace()
                     player = False
                     continue
 

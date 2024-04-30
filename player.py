@@ -40,7 +40,7 @@ class Player():
                             piece.position = next
                             player.filterPossibleMoves(self)
 
-                            if self.kingP.check(player.possibleMoves):
+                            if self.kingP.check(player.possibleMoves, self, player):
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
                                 self.filterPossibleMoves(player)
@@ -60,7 +60,7 @@ class Player():
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -78,8 +78,18 @@ class Player():
             # Have to account for king pieces because
             # they have an extra parameter for the moveChoose method 
 
-            if self.take(player, next):
-                if piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
+            if piece.dist(piece.position, next) == 2:
+                
+                if self.castleCheck(player, piece, next):
+                    self.castleMove(piece, next)
+                    player.filterPossibleMoves(self)
+                    self.filterPossibleMoves(player)
+                    return True
+                else:
+                    return False
+
+            elif self.take(player, next):
+                if piece.moveChoose(next, player.possibleMoves, player) and self.collision(piece, player, next):
                     for i,val in enumerate(player.pieces): #could technically return None if next doesn't correspond with a piece on the board somehow
 
                         # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
@@ -89,7 +99,7 @@ class Player():
                             piece.position = next
                             player.filterPossibleMoves(self)
 
-                            if self.kingP.check(player.possibleMoves):
+                            if self.kingP.check(player.possibleMoves, self, player):
                                 player.pieces.append(playerPrev)
                                 piece.position = prev
                                 # print("Your king would be in check!")
@@ -103,13 +113,14 @@ class Player():
                     self.filterPossibleMoves(player)
                     return False
 
-            elif piece.moveChoose(next, player.possibleMoves) and self.collision(piece, player, next):
+            elif piece.moveChoose(next, player.possibleMoves, player) and self.collision(piece, player, next):
                 # Need to preserve previous moves so that the move can be undone if the king is in check as a result of the move
                 prev = piece.position
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
+                    # breakpoint()
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -120,6 +131,7 @@ class Player():
                     return True
             else:
                 self.filterPossibleMoves(player)
+                # breakpoint()
                 return False
 
 
@@ -134,7 +146,7 @@ class Player():
                         piece.position = next
                         player.filterPossibleMoves(self)
 
-                        if self.kingP.check(player.possibleMoves):
+                        if self.kingP.check(player.possibleMoves, self, player):
                             player.pieces.append(playerPrev)
                             piece.position = prev
                             # print("Your king would be in check!")
@@ -151,7 +163,7 @@ class Player():
                 piece.position = next
                 player.filterPossibleMoves(self)
 
-                if self.kingP.check(player.possibleMoves):
+                if self.kingP.check(player.possibleMoves, self, player):
                     piece.position = prev
                     self.filterPossibleMoves(player)
                     # print("Your king would be in check!")
@@ -290,7 +302,7 @@ class Player():
         self.possibleMoves.clear()
         for i in self.pieces:
             if i.name.lower() == "k":
-                buffer = i.moves(player.possibleMoves)
+                buffer = i.moves(player.possibleMoves, player)
             else:
                 buffer = i.moves()
 
@@ -332,6 +344,8 @@ class Player():
 
     def stalemate(self, filteredPossibleMoves, player):
         # Returns True if king has no moves and isn't in check
+        if self.kingP.check(filteredPossibleMoves, self, player):
+            return False
 
         thisPlayer = copy.deepcopy(self)
         thatPlayer = copy.deepcopy(player)
@@ -343,7 +357,128 @@ class Player():
                 thisPlayer = copy.deepcopy(self)
                 thatPlayer = copy.deepcopy(player)
         # print(self.kingP.possibleMoves)
-        if not self.kingP.check(filteredPossibleMoves) and not self.kingP.possibleMoves:
+        if not self.kingP.check(filteredPossibleMoves, self, player) and not self.kingP.possibleMoves:
             return True
         else:
             return False
+
+    # NOTES
+    # **Castling postiions for White**
+    #	**Queen Side**
+    #       General movement:
+    #	    - [1, 0], [2, 0], [3, 0]
+    #       King movement:
+    #	    - [3, 0], [2, 0]
+    #	    Ending positions for each piece:
+    #	    - King: [2, 0]
+    #	    - Rook: [3, 0]
+    	    
+    #	**King Side**
+    #       General movement:
+    #	    - [6, 0], [5, 0]
+    #       King movement:
+    #	    - [5, 0], [6, 0]
+    #	    Ending positions for each piece:
+    #	    - King: [6, 0]
+    #	    - Rook: [5, 0]
+
+    # **Castling postiions for Black**
+    #	**Queen Side**
+    #       General movement:
+    #	    - [1, 7], [2, 7], [3, 7]
+    #       King movement:
+    #	    - [3, 7], [2, 7]
+    #	    Ending positions for each piece:
+    #	    - King: [2, 7]
+    #	    - Rook: [3, 7]
+
+    #	**King Side**
+    #       General movement:
+    #	    - [6, 7], [5, 7]
+    #       King movement:
+    #	    - [3, 7], [2, 7]
+    #	    Ending positions for each piece:
+    #	    - King: [6, 7]
+    #	    - Rook: [5, 7]
+
+
+
+    # castle method requirements
+    # - Needs to make sure there are no pieces in between the king and the rook
+    # - Need to check if king is in check before moving
+    # - Checks to see if the king is moving through the path of an enemy piece
+    # - Have to be able to castle on king or queen side
+
+    # Possible approaches
+    # **Manual checking**
+    #	- Making sure the king is not in check
+    #   - Making sure each of the pieces from the chosen side haven't moved from their starting positions
+    #   - Checking if there are pieces in all of the specified castling positions
+    #	- Checking if possible moves that appear in the castling path are valid
+    #	- Making sure to only do the checking for possible moves for spaces the king moves through
+    #	- Removing each of the piece objects from the pieces arraylist and putting them on the chosen side if all conditions are met
+
+    def castleCheck(self, player, piece, next):
+        # True is left, False is right
+
+        if piece.name.lower() == "k" and piece.dist(piece.position, next) == 2 and next[1] == piece.position[1]:
+            side = True if piece.position[0] > next[0] else False
+            positionsSelf = [i.position for i in self.pieces]
+            positionsOpponent = [i.position for i in player.pieces]
+
+            if self.color:
+                y = 0
+            else:
+                y = 7
+
+            positionsQ = [[1, y], [2, y], [3, y]]
+            positionsK = [[5, y], [6, y]]
+
+            if side:
+                for i in positionsQ:
+                    if i in positionsSelf or i in positionsOpponent:
+                        return False
+            else:
+                for i in positionsK:
+                    if i in positionsSelf or i in positionsOpponent:
+                        return False
+
+            # For possible double checking a possible move in player class
+            # for i in player.possibleMoves:
+            #     if side:
+            #         if i in positionsQ:
+            #         elif i in positionsK:
+            #     else:
+            #         if i in positionsQ:
+            #         elif i in positionsK:
+
+            thisPlayer = copy.deepcopy(self)
+            thatPlayer = copy.deepcopy(player)
+            for j in thatPlayer.pieces:
+                for i in j.possibleMoves:
+                    if i in positionsQ and thatPlayer.movePiece(thisPlayer, j, piece.position):
+                        return False
+                    elif i in positionsK and thatPlayer.movePiece(thisPlayer, j, piece.position):
+                        return False
+            return True
+
+        else:
+            return False
+
+
+
+    def castleMove(self, piece, next):
+        side = True if piece.position[0] > next[0] else False
+
+        if self.color:
+            y = 0
+        else:
+            y = 7
+
+        if side:
+            self.kingP.position = [2, y]
+            self.rooks[0].position = [3, y]
+        else:
+            self.kingP.position = [6, y]
+            self.rooks[1].position = [5, y]
+
