@@ -344,6 +344,8 @@ class Player():
 
     def stalemate(self, filteredPossibleMoves, player):
         # Returns True if king has no moves and isn't in check
+        if self.kingP.check(filteredPossibleMoves, self, player):
+            return False
 
         thisPlayer = copy.deepcopy(self)
         thatPlayer = copy.deepcopy(player)
