@@ -60,9 +60,3 @@ class King(piece.Piece):
                 return True
         return False
 
-    def mate(self, filteredPossibleMoves, player): 
-        # Returns True if king has no moves and is in check
-        moves = self.moves(filteredPossibleMoves, player)
-        if not moves and self.check(filteredPossibleMoves):
-            return True
-
