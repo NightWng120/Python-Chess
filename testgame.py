@@ -6,7 +6,7 @@ white = player.Player(True)
 black = player.Player(False)
 colors = {True:white, False:black}
 players = {True:"white", False:"black"}
-with open('realmatch2.txt', 'r') as f:
+with open('test1.txt', 'r') as f:
     data = f.readlines()
 data = data[0].split('\n')
 data.pop()
@@ -54,7 +54,7 @@ for i in data:
     piecesAll.clear()
 
     print(f"stalemate: {black.stalemate(white.possibleMoves, white)}")
-    print(f"hasWon: {game.hasWon(white, black, user)}")
+    # print(f"hasWon: {game.hasWon(white, black, user)}")
     # print(f"Player {players[user]} is in check: {colors[user].kingP.check(colors[not user].possibleMoves)}")
     # print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
     # print(f"Player: {user}")
