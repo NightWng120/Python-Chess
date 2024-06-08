@@ -70,7 +70,7 @@ for i in data:
     gameboard.printBoard()
     piecesAll.clear()
 
-    # print(f"stalemate: {black.stalemate(white.possibleMoves, white)}")
+    print(f"stalemate: {black.stalemate(white.possibleMoves, white)}")
     # print(f"hasWon: {game.hasWon(white, black, user)}")
     # print(f"Player {players[user]} is in check: {colors[user].kingP.check(colors[not user].possibleMoves)}")
     # print(f"{colors[user].kingP.moves(colors[not user].possibleMoves)}")
