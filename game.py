@@ -4,14 +4,17 @@ import player, board,pdb, copy
 # - Test each of its possible moves to see if it would stop their king from being in check
 # - Make sure to reset each of the player variables after each time a movePiece call is made
 
-def hasWon(white, black, player):
+def hasWon(white, black, player, smatew, smateb):
     # if playerW.movePiece(playerB, playerW.pieces[playerW.index(gameBoard.inputToPos(userIn[0]))], gameBoard.inputToPos(userIn[1])):
     w = copy.deepcopy(white)
     b = copy.deepcopy(black)
     w.filterPossibleMoves(b)
     b.filterPossibleMoves(w)
 
-    if player:
+    if smatew or smateb:
+        return False
+
+    elif player:
         for i,val in enumerate(white.pieces):
             for j in w.pieces[i].possibleMoves:
                 # print("We out here in white")
@@ -122,7 +125,9 @@ def chessGame(playerW, playerB):
 
 
     while game:
-        if playerW.stalemate(playerB.possibleMoves, playerB) and start != True:
+        smatew = playerW.stalemate(playerB.possibleMoves, playerB)
+        smateb = playerB.stalemate(playerW.possibleMoves, playerW)
+        if smatew and start != True:
             piecesAll = playerW.pieces.copy()
             for i in playerB.pieces:
                 piecesAll.append(i)
@@ -134,7 +139,7 @@ def chessGame(playerW, playerB):
             game = False
             continue
 
-        elif playerB.stalemate(playerW.possibleMoves, playerW) and start != True:
+        elif smateb and start != True:
             piecesAll = playerW.pieces.copy()
             for i in playerB.pieces:
                 piecesAll.append(i)
@@ -146,7 +151,7 @@ def chessGame(playerW, playerB):
             game = False
             continue
 
-        if hasWon(playerW, playerB, player):
+        if hasWon(playerW, playerB, player, smatew, smateb):
             piecesAll = playerW.pieces.copy()
             for i in playerB.pieces:
                 piecesAll.append(i)
